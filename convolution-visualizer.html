@@ -4,9 +4,188 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Convolution & Pooling Visualizer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .input-grid,
+        .output-grid {
+            display: grid;
+            margin: 20px 0;
+        }
+        .input-grid div,
+        .output-grid div {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+        }
+        .controls {
+            margin: 20px 0;
+        }
+        .controls label {
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <h1>Convolution & Pooling Visualizer</h1>
-    <p>Coming Soon...</p>
+    <div class="container">
+        <div class="controls">
+            <label for="grid-size">Grid Size:</label>
+            <select id="grid-size">
+                <option value="5">5x5</option>
+                <option value="7">7x7</option>
+                <option value="9">9x9</option>
+            </select>
+
+            <label for="kernel-size">Kernel Size:</label>
+            <select id="kernel-size">
+                <option value="3">3x3</option>
+                <option value="5">5x5</option>
+            </select>
+
+            <label for="operation">Operation:</label>
+            <select id="operation">
+                <option value="convolution">Convolution</option>
+                <option value="max-pooling">Max Pooling</option>
+                <option value="average-pooling">Average Pooling</option>
+            </select>
+
+            <button onclick="generateGrid()">Generate Grid</button>
+            <button onclick="applyOperation()">Apply Operation</button>
+        </div>
+
+        <div>
+            <h3>Input Grid</h3>
+            <div class="input-grid" id="input-grid"></div>
+        </div>
+
+        <div>
+            <h3>Output Grid</h3>
+            <div class="output-grid" id="output-grid"></div>
+        </div>
+    </div>
+
+    <script>
+        const inputGrid = document.getElementById("input-grid");
+        const outputGrid = document.getElementById("output-grid");
+        let gridSize = 5;
+        let kernelSize = 3;
+        let gridValues = [];
+
+        function generateGrid() {
+            gridSize = parseInt(document.getElementById("grid-size").value);
+            kernelSize = parseInt(document.getElementById("kernel-size").value);
+
+            gridValues = Array.from({ length: gridSize }, () =>
+                Array.from({ length: gridSize }, () => Math.floor(Math.random() * 10))
+            );
+
+            renderGrid(inputGrid, gridValues);
+            outputGrid.innerHTML = ""; // Clear the output grid
+        }
+
+        function renderGrid(container, values) {
+            container.innerHTML = "";
+            container.style.gridTemplateColumns = `repeat(${values[0].length}, 30px)`;
+            container.style.gridTemplateRows = `repeat(${values.length}, 30px)`;
+            values.forEach(row => {
+                row.forEach(value => {
+                    const cell = document.createElement("div");
+                    cell.textContent = value;
+                    container.appendChild(cell);
+                });
+            });
+        }
+
+        function applyOperation() {
+            const operation = document.getElementById("operation").value;
+            let result;
+
+            if (operation === "convolution") {
+                const kernel = Array.from({ length: kernelSize }, () =>
+                    Array.from({ length: kernelSize }, () => Math.floor(Math.random() * 3 - 1))
+                );
+                result = applyConvolution(gridValues, kernel);
+                alert("Random Kernel Applied:\n" + kernel.map(row => row.join(" ")).join("\n"));
+            } else if (operation === "max-pooling") {
+                result = applyPooling(gridValues, "max");
+            } else if (operation === "average-pooling") {
+                result = applyPooling(gridValues, "average");
+            }
+
+            renderGrid(outputGrid, result);
+        }
+
+        function applyConvolution(grid, kernel) {
+            const outputSize = grid.length - kernel.length + 1;
+            const output = Array.from({ length: outputSize }, () =>
+                Array.from({ length: outputSize }, () => 0)
+            );
+
+            for (let i = 0; i < outputSize; i++) {
+                for (let j = 0; j < outputSize; j++) {
+                    let sum = 0;
+                    for (let ki = 0; ki < kernel.length; ki++) {
+                        for (let kj = 0; kj < kernel.length; kj++) {
+                            sum += grid[i + ki][j + kj] * kernel[ki][kj];
+                        }
+                    }
+                    output[i][j] = sum;
+                }
+            }
+            return output;
+        }
+
+        function applyPooling(grid, type) {
+            const poolSize = kernelSize;
+            const outputSize = Math.floor(grid.length / poolSize);
+            const output = Array.from({ length: outputSize }, () =>
+                Array.from({ length: outputSize }, () => 0)
+            );
+
+            for (let i = 0; i < outputSize; i++) {
+                for (let j = 0; j < outputSize; j++) {
+                    const subGrid = grid.slice(i * poolSize, i * poolSize + poolSize).map(row =>
+                        row.slice(j * poolSize, j * poolSize + poolSize)
+                    );
+                    if (type === "max") {
+                        output[i][j] = Math.max(...subGrid.flat());
+                    } else if (type === "average") {
+                        const sum = subGrid.flat().reduce((a, b) => a + b, 0);
+                        output[i][j] = Math.floor(sum / (poolSize * poolSize));
+                    }
+                }
+            }
+            return output;
+        }
+    </script>
 </body>
 </html>
