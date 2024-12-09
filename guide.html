@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Guide</title>
+    <title>Interactive ML Model Guide</title>
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <style>
         body {
@@ -11,48 +11,59 @@
             margin: 0;
             padding: 20px;
         }
-        h1 {
-            text-align: center;
-        }
         .diagram-container {
             margin: 30px auto;
             width: 100%;
-            max-width: 800px;
+            max-width: 1200px;
         }
         nav {
-            margin: 10px 0;
+            margin: 20px 0;
         }
         nav a {
             text-decoration: none;
             margin-right: 15px;
             color: #007bff;
         }
+        nav a:hover {
+            color: #0056b3;
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1>Interactive Model Guide</h1>
+        <h1>Interactive Guide: Choosing the Best Machine Learning Model</h1>
         <nav>
             <a href="index.html">Home</a>
             <a href="metrics-calculator.html">Metrics Calculator</a>
             <a href="convolution-visualizer.html">Visualizer</a>
         </nav>
     </header>
-    <main>
-        <p>Use this guide to select the best model for your task.</p>
-        <div class="diagram-container">
-            <div class="mermaid">
-                graph TD
-                A[Start: What type of task?]
-                A -->|Classification| B[Is interpretability important?]
-                A -->|Regression| C[Is the relationship linear?]
-                B -->|Yes| D[Use Decision Tree or Logistic Regression]
-                B -->|No| E[Use SVM or Neural Networks]
-                C -->|Yes| F[Use Linear Regression]
-                C -->|No| G[Use Gradient Boosting or Random Forest]
-            </div>
+
+    <div class="diagram-container">
+        <div class="mermaid">
+            graph TD
+            A[Start: Define Problem] --> B[What is the Problem Type?]
+            B -->|Classification| C[What is the Data Type?]
+            B -->|Regression| D[What is the Data Type?]
+            B -->|Unsupervised Learning| E[What is the Goal?]
+
+            %% Classification Path
+            C -->|Structured Data| F[Classification: Decision Trees, Random Forest<br>Examples: Classify loan approvals, detect fraudulent transactions]
+            C -->|Text Data| G[Classification: Naive Bayes, Neural Networks, Transformers<br>Examples: Sentiment analysis, categorize documents, spam detection]
+            C -->|High-Dimensional Data| H[Classification: SVM, Neural Networks<br>Examples: Image classification, disease diagnosis, pattern detection]
+
+            %% Regression Path
+            D -->|Structured Data| I[Regression: Linear Regression, Non-Linear Regression<br>Examples: Predict sales, housing prices, energy consumption]
+            D -->|Time-Series Data| J[Regression: ARIMA, RNNs, Gradient Boosting<br>Examples: Forecast stock prices, website traffic, patient health trends]
+            D -->|High-Dimensional Data| K[Regression: Neural Networks, XGBoost<br>Examples: Analyze MRI scans, detect defects in manufacturing]
+
+            %% Unsupervised Learning Path
+            E -->|Segment Customers or Products| L[Clustering: K-Means, DBSCAN<br>Examples: Customer segmentation, group product types]
+            E -->|Reduce Dimensionality| M[Dimensionality Reduction: PCA, Autoencoders<br>Examples: Visualize high-dimensional data, compress image data]
+            E -->|Detect Anomalies| N[Density-Based Clustering: HDBSCAN<br>Examples: Detect anomalies in cybersecurity logs, sensor data]
         </div>
-    </main>
+    </div>
+
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>
