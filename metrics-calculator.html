@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Metrics Calculator</title>
+    <title>Metrics Calculator & Analysis</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,33 +18,111 @@
         .output {
             margin-top: 20px;
         }
+        .explanation {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
     </style>
 </head>
 <body>
-    <h1>Metrics Calculator</h1>
-    <p>Enter the confusion matrix values:</p>
-    <label>True Positives (TP): <input id="tp" type="number"></label><br>
-    <label>False Positives (FP): <input id="fp" type="number"></label><br>
-    <label>True Negatives (TN): <input id="tn" type="number"></label><br>
-    <label>False Negatives (FN): <input id="fn" type="number"></label><br>
-    <button onclick="calculateMetrics()">Calculate</button>
-    <div class="output" id="output"></div>
+    <h1>Metrics Calculator & Interpretation Tool</h1>
+
+    <!-- Section 1: Confusion Matrix Calculator -->
+    <div class="section">
+        <h2>Confusion Matrix Calculator</h2>
+        <p>Enter the confusion matrix values:</p>
+        <label>True Positives (TP): <input id="tp" type="number"></label><br>
+        <label>False Positives (FP): <input id="fp" type="number"></label><br>
+        <label>True Negatives (TN): <input id="tn" type="number"></label><br>
+        <label>False Negatives (FN): <input id="fn" type="number"></label><br>
+        <button onclick="calculateConfusionMetrics()">Calculate Metrics</button>
+        <div class="output" id="confusion-output"></div>
+    </div>
+
+    <!-- Section 2: Metrics Interpretation -->
+    <div class="section">
+        <h2>Metrics Interpretation Tool</h2>
+        <p>Enter the known performance metrics to analyze the model and receive feedback:</p>
+        <label>Accuracy (%): <input id="accuracy" type="number" step="0.01"></label><br>
+        <label>Sensitivity (Recall) (%): <input id="sensitivity" type="number" step="0.01"></label><br>
+        <label>Specificity (%): <input id="specificity" type="number" step="0.01"></label><br>
+        <button onclick="analyzePerformance()">Analyze</button>
+        <div class="output" id="interpretation-output"></div>
+        <div class="explanation" id="interpretation-explanation"></div>
+    </div>
+
     <script>
-        function calculateMetrics() {
+        // Confusion Matrix Calculator
+        function calculateConfusionMetrics() {
             const tp = parseInt(document.getElementById("tp").value || 0);
             const fp = parseInt(document.getElementById("fp").value || 0);
             const tn = parseInt(document.getElementById("tn").value || 0);
             const fn = parseInt(document.getElementById("fn").value || 0);
-            const accuracy = ((tp + tn) / (tp + fp + tn + fn)).toFixed(2);
-            const precision = (tp / (tp + fp)).toFixed(2);
-            const recall = (tp / (tp + fn)).toFixed(2);
+
+            const accuracy = ((tp + tn) / (tp + fp + tn + fn) * 100).toFixed(2);
+            const precision = (tp / (tp + fp) * 100).toFixed(2);
+            const recall = (tp / (tp + fn) * 100).toFixed(2);
             const f1 = (2 * (precision * recall) / (parseFloat(precision) + parseFloat(recall))).toFixed(2);
-            document.getElementById("output").innerHTML = `
-                <p>Accuracy: ${accuracy}</p>
-                <p>Precision: ${precision}</p>
-                <p>Recall: ${recall}</p>
-                <p>F1 Score: ${f1}</p>
+
+            const outputDiv = document.getElementById("confusion-output");
+            outputDiv.innerHTML = `
+                <p><strong>Metrics Calculated:</strong></p>
+                <ul>
+                    <li>Accuracy: ${accuracy}%</li>
+                    <li>Precision: ${precision}%</li>
+                    <li>Recall (Sensitivity): ${recall}%</li>
+                    <li>F1 Score: ${f1}%</li>
+                </ul>
             `;
+        }
+
+        // Metrics Interpretation Tool
+        function analyzePerformance() {
+            const accuracy = parseFloat(document.getElementById("accuracy").value || 0);
+            const sensitivity = parseFloat(document.getElementById("sensitivity").value || 0);
+            const specificity = parseFloat(document.getElementById("specificity").value || 0);
+
+            const outputDiv = document.getElementById("interpretation-output");
+            const explanationDiv = document.getElementById("interpretation-explanation");
+
+            // Display the entered values
+            outputDiv.innerHTML = `
+                <p><strong>Entered Metrics:</strong></p>
+                <ul>
+                    <li>Accuracy: ${accuracy}%</li>
+                    <li>Sensitivity (Recall): ${sensitivity}%</li>
+                    <li>Specificity: ${specificity}%</li>
+                </ul>
+            `;
+
+            // Analyze performance
+            let explanation = "";
+
+            if (accuracy < 50) {
+                explanation += "The model's accuracy is below acceptable levels. This could indicate random predictions or poor feature selection.<br>";
+            }
+
+            if (sensitivity >= 95 && specificity <= 10) {
+                explanation += "The model has high sensitivity but very low specificity. This suggests it is predicting almost everything as positive, leading to a high rate of false positives.<br>";
+                explanation += "For improvement, try balancing the dataset, adjusting decision thresholds, or using algorithms robust to class imbalance like Random Forest or XGBoost.<br>";
+            }
+
+            if (sensitivity < 50) {
+                explanation += "Low sensitivity indicates the model is missing many positive cases (high false negatives). Consider improving the feature set or using more complex models.<br>";
+            }
+
+            if (specificity < 50 && specificity > 10) {
+                explanation += "Specificity is low, which means the model struggles to identify true negatives. Investigate if the data is imbalanced or if the features used are biased toward positive cases.<br>";
+            }
+
+            if (sensitivity > 90 && specificity > 90) {
+                explanation += "The model demonstrates good sensitivity and specificity, indicating balanced performance in identifying positives and negatives.<br>";
+            }
+
+            explanationDiv.innerHTML = explanation || "The metrics are within acceptable ranges. No major performance issues detected.";
         }
     </script>
 </body>
