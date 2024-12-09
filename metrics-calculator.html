@@ -25,17 +25,20 @@
             margin-top: 20px;
             font-weight: bold;
         }
-        button {
-            margin-top: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
         }
-        button:hover {
-            background-color: #0056b3;
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f4f9;
         }
     </style>
 </head>
@@ -68,7 +71,61 @@
         <div class="explanation" id="interpretation-explanation"></div>
     </div>
 
+    <!-- Section 3: Metric Ranges Table -->
+    <div class="section">
+        <h2>Metric Interpretation Table</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Low (0-50%)</th>
+                    <th>Medium (51-80%)</th>
+                    <th>High (81-100%)</th>
+                    <th>Interpretation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Accuracy</td>
+                    <td>Poor overall correctness</td>
+                    <td>Decent predictions</td>
+                    <td>Excellent overall correctness</td>
+                    <td>May be misleading in imbalanced datasets. Check other metrics for deeper insight.</td>
+                </tr>
+                <tr>
+                    <td>Sensitivity (Recall)</td>
+                    <td>Many false negatives</td>
+                    <td>Some false negatives</td>
+                    <td>Few false negatives</td>
+                    <td>High sensitivity ensures positives are rarely missed (useful in medical or fraud detection).</td>
+                </tr>
+                <tr>
+                    <td>Specificity</td>
+                    <td>Many false positives</td>
+                    <td>Some false positives</td>
+                    <td>Few false positives</td>
+                    <td>High specificity ensures negatives are rarely misclassified (useful in spam filtering).</td>
+                </tr>
+                <tr>
+                    <td>Precision</td>
+                    <td>Many false positives</td>
+                    <td>Decent precision</td>
+                    <td>Few false positives</td>
+                    <td>High precision is critical when false positives are costly (e.g., spam detection).</td>
+                </tr>
+                <tr>
+                    <td>F1 Score</td>
+                    <td>Imbalanced precision/recall</td>
+                    <td>Good balance</td>
+                    <td>Strong balance</td>
+                    <td>High F1 indicates the model balances precision and recall well.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
     <script>
+        // Confusion Matrix Calculator
         function calculateConfusionMetrics() {
             const tp = parseInt(document.getElementById("tp").value || 0);
             const fp = parseInt(document.getElementById("fp").value || 0);
@@ -81,7 +138,6 @@
             const recall = (tp / (tp + fn) * 100).toFixed(2); // Sensitivity
             const specificity = (tn / (tn + fp) * 100).toFixed(2);
             const f1 = (2 * (precision * recall) / (parseFloat(precision) + parseFloat(recall))).toFixed(2);
-            const balancedAccuracy = ((parseFloat(recall) + parseFloat(specificity)) / 2).toFixed(2);
 
             // Display results
             const outputDiv = document.getElementById("confusion-output");
@@ -93,7 +149,6 @@
                     <li>Recall (Sensitivity): ${recall}%</li>
                     <li>Specificity: ${specificity}%</li>
                     <li>F1 Score: ${f1}%</li>
-                    <li>Balanced Accuracy: ${balancedAccuracy}%</li>
                 </ul>
             `;
 
@@ -105,6 +160,7 @@
             document.getElementById("f1").value = f1;
         }
 
+        // Metrics Interpretation Tool
         function analyzePerformance() {
             const accuracy = parseFloat(document.getElementById("accuracy").value || 0);
             const sensitivity = parseFloat(document.getElementById("sensitivity").value || 0);
