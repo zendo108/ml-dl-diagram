@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Guide</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .diagram-container {
+            margin: 30px auto;
+            width: 100%;
+            max-width: 800px;
+        }
+        nav {
+            margin: 10px 0;
+        }
+        nav a {
+            text-decoration: none;
+            margin-right: 15px;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Interactive Model Guide</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="metrics-calculator.html">Metrics Calculator</a>
+            <a href="convolution-visualizer.html">Visualizer</a>
+        </nav>
+    </header>
+    <main>
+        <p>Use this guide to select the best model for your task.</p>
+        <div class="diagram-container">
+            <div class="mermaid">
+                graph TD
+                A[Start: What type of task?]
+                A -->|Classification| B[Is interpretability important?]
+                A -->|Regression| C[Is the relationship linear?]
+                B -->|Yes| D[Use Decision Tree or Logistic Regression]
+                B -->|No| E[Use SVM or Neural Networks]
+                C -->|Yes| F[Use Linear Regression]
+                C -->|No| G[Use Gradient Boosting or Random Forest]
+            </div>
+        </div>
+    </main>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+</body>
+</html>
