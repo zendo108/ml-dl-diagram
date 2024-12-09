@@ -1,58 +1,79 @@
 
----
+# Machine Learning Teaching & Application Tool
 
-# Machine Learning Models Diagram
-
-This project hosts an interactive visual guide for understanding and choosing the right machine learning models for various tasks. The guide is structured to help users navigate through models based on their characteristics, applications, and decision criteria.
+This web app is designed to serve as both a **teaching aid** and a **real-world application tool** for machine learning (ML) concepts. It provides interactive visualizations, calculators, and guides to help users understand ML models and their applications.
 
 ## **Features**
 
-- Interactive diagram explaining different machine learning models.
-- Categories include **Prediction**, **Description**, and **Analysis/Comparison**.
-- Covers supervised, unsupervised, and generative models like:
-  - Decision Trees, Random Forest, SVM, K-Means, DBSCAN, Transformers, LLMs, and more.
-- Mermaid-based decision algorithms for model selection.
-- Example applications and suggestions for when models are not suitable.
+### **1. Home Page**
+- Introduction to the app and its purpose.
+- Navigation menu linking to all sections.
+- **Light/Dark Mode Toggle** for better accessibility.
+
+### **2. Interactive Guide**
+- A dynamic, decision-making guide powered by **Mermaid.js**.
+- Helps users select the most suitable ML model based on:
+  - Task type (classification, regression, clustering, etc.).
+  - Data characteristics (size, complexity, and more).
+  - Computational resources and other considerations.
+- Includes links to individual model pages with detailed descriptions and real-world examples.
+
+### **3. Accuracy & Metrics Calculator**
+- A tool to calculate evaluation metrics for classification models:
+  - **Accuracy**
+  - **Precision**
+  - **Recall**
+  - **F1 Score**
+- Features:
+  - Input fields for confusion matrix values (TP, FP, TN, FN).
+  - Real-time results displayed dynamically.
+  - Intuitive interface for ease of use.
+
+### **4. Convolution & Pooling Visualizer**
+- Interactive tool to simulate and visualize:
+  - **Convolution operations** with user-defined kernel sizes.
+  - **Max pooling** and **average pooling** operations.
+- Features:
+  - User-defined grid sizes.
+  - Dynamic generation of input and output grids.
+  - Step-by-step visualization of the convolution and pooling process.
+
+### **5. About/Help Page**
+- Overview of the app’s purpose and structure.
+- Guidance on using each section.
+- Frequently Asked Questions (FAQs) or a contact section for feedback.
+
+---
 
 ## **How to Use**
+1. Clone the repository or download the source files.
+2. Open `index.html` in a modern web browser.
+3. Navigate between sections using the menu:
+   - **Interactive Guide**: Select the best ML model for your task.
+   - **Metrics Calculator**: Evaluate classification model performance.
+   - **Visualizer**: Learn about CNN operations with interactive grids.
+   - **About**: Learn more about the app and how to use it.
 
-1. Open the hosted **HTML file** in your browser.
-2. Navigate the interactive diagram by clicking on categories and model-specific nodes.
-3. Use the decision-making algorithms to determine which model is suitable for your dataset and task.
-4. Explore example use cases and model features for better understanding.
+---
 
-## **Technical Requirements**
+## **Technology Stack**
+- **HTML5** and **CSS3**: For structure and styling.
+- **JavaScript**: For interactivity and dynamic calculations.
+- **Mermaid.js**: For creating dynamic flowcharts and decision trees.
 
-- A modern web browser (e.g., Chrome, Firefox, Edge).
-- Internet access (if hosting externally).
-- Diagrams are generated using **Mermaid.js** for seamless integration.
-
-## **Project Structure**
-
-- **index.html**: The main interactive diagram file.
-- **styles.css**: Custom styles for enhancing the diagram layout (if applicable).
-- **README.md**: This guide.
+---
 
 ## **Future Enhancements**
+- Add support for exporting data from tools (e.g., feature maps, metrics results).
+- Extend the interactive guide with more detailed decision-making criteria.
+- Integrate real-world datasets for users to practice with.
+- Add an option to upload user images for convolution/pooling operations.
 
-- Add real-world datasets for testing models.
-- Integrate explanations for hyperparameter tuning.
-- Provide links to pre-trained models for direct use.
-
-## **Contributions**
-
-Contributions are welcome! Feel free to open an issue or submit a pull request for improvements or additional models.
-
-## **Credits**
-
-- Diagram generated using **Draw.io**.
-- Mermaid.js used for creating interactive decision-making algorithms.
-- Content authored with examples and guidelines for practical use.
+---
 
 ## **License**
-
 This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-Ivan Aranda Dec 8, 2024
+Ivan Aranda Dec 9, 2024
