@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Metrics Calculator & Analysis</title>
+    <title>Metrics Calculator & Analysis Tool</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,6 +15,9 @@
             padding: 5px;
             font-size: 16px;
         }
+        .section {
+            margin-bottom: 30px;
+        }
         .output {
             margin-top: 20px;
         }
@@ -22,13 +25,22 @@
             margin-top: 20px;
             font-weight: bold;
         }
-        .section {
-            margin-bottom: 30px;
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <h1>Metrics Calculator & Interpretation Tool</h1>
+    <h1>Metrics Calculator & Analysis Tool</h1>
 
     <!-- Section 1: Confusion Matrix Calculator -->
     <div class="section">
@@ -42,31 +54,36 @@
         <div class="output" id="confusion-output"></div>
     </div>
 
-    <!-- Section 2: Metrics Interpretation -->
+    <!-- Section 2: Metrics Interpretation Tool -->
     <div class="section">
         <h2>Metrics Interpretation Tool</h2>
-        <p>Enter the known performance metrics to analyze the model and receive feedback:</p>
+        <p>Pre-filled from the confusion matrix calculator. Modify if necessary:</p>
         <label>Accuracy (%): <input id="accuracy" type="number" step="0.01"></label><br>
         <label>Sensitivity (Recall) (%): <input id="sensitivity" type="number" step="0.01"></label><br>
         <label>Specificity (%): <input id="specificity" type="number" step="0.01"></label><br>
+        <label>Precision (%): <input id="precision" type="number" step="0.01"></label><br>
+        <label>F1 Score (%): <input id="f1" type="number" step="0.01"></label><br>
         <button onclick="analyzePerformance()">Analyze</button>
         <div class="output" id="interpretation-output"></div>
         <div class="explanation" id="interpretation-explanation"></div>
     </div>
 
     <script>
-        // Confusion Matrix Calculator
         function calculateConfusionMetrics() {
             const tp = parseInt(document.getElementById("tp").value || 0);
             const fp = parseInt(document.getElementById("fp").value || 0);
             const tn = parseInt(document.getElementById("tn").value || 0);
             const fn = parseInt(document.getElementById("fn").value || 0);
 
+            // Metrics calculations
             const accuracy = ((tp + tn) / (tp + fp + tn + fn) * 100).toFixed(2);
             const precision = (tp / (tp + fp) * 100).toFixed(2);
-            const recall = (tp / (tp + fn) * 100).toFixed(2);
+            const recall = (tp / (tp + fn) * 100).toFixed(2); // Sensitivity
+            const specificity = (tn / (tn + fp) * 100).toFixed(2);
             const f1 = (2 * (precision * recall) / (parseFloat(precision) + parseFloat(recall))).toFixed(2);
+            const balancedAccuracy = ((parseFloat(recall) + parseFloat(specificity)) / 2).toFixed(2);
 
+            // Display results
             const outputDiv = document.getElementById("confusion-output");
             outputDiv.innerHTML = `
                 <p><strong>Metrics Calculated:</strong></p>
@@ -74,27 +91,39 @@
                     <li>Accuracy: ${accuracy}%</li>
                     <li>Precision: ${precision}%</li>
                     <li>Recall (Sensitivity): ${recall}%</li>
+                    <li>Specificity: ${specificity}%</li>
                     <li>F1 Score: ${f1}%</li>
+                    <li>Balanced Accuracy: ${balancedAccuracy}%</li>
                 </ul>
             `;
+
+            // Autofill interpretation fields
+            document.getElementById("accuracy").value = accuracy;
+            document.getElementById("sensitivity").value = recall;
+            document.getElementById("specificity").value = specificity;
+            document.getElementById("precision").value = precision;
+            document.getElementById("f1").value = f1;
         }
 
-        // Metrics Interpretation Tool
         function analyzePerformance() {
             const accuracy = parseFloat(document.getElementById("accuracy").value || 0);
             const sensitivity = parseFloat(document.getElementById("sensitivity").value || 0);
             const specificity = parseFloat(document.getElementById("specificity").value || 0);
+            const precision = parseFloat(document.getElementById("precision").value || 0);
+            const f1 = parseFloat(document.getElementById("f1").value || 0);
 
             const outputDiv = document.getElementById("interpretation-output");
             const explanationDiv = document.getElementById("interpretation-explanation");
 
-            // Display the entered values
+            // Display entered values
             outputDiv.innerHTML = `
                 <p><strong>Entered Metrics:</strong></p>
                 <ul>
                     <li>Accuracy: ${accuracy}%</li>
                     <li>Sensitivity (Recall): ${sensitivity}%</li>
                     <li>Specificity: ${specificity}%</li>
+                    <li>Precision: ${precision}%</li>
+                    <li>F1 Score: ${f1}%</li>
                 </ul>
             `;
 
